@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 provider "aws" {
   version = "~> 2.19.0"
   region  = "us-east-1"
@@ -11,13 +13,17 @@ module "label" {
   name      = var.name
 }
 
+locals {
+  account_id = var.account_id == "" ? data.aws_caller_identity.current.account_id : var.account_id
+}
+
 data "aws_iam_policy_document" "default" {
   statement {
     actions = ["sts:AssumeRole"]
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_id}:root"]
+      identifiers = ["arn:aws:iam::${local.account_id}:root"]
     }
 
     condition {
