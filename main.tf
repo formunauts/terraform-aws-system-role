@@ -1,9 +1,6 @@
 provider "aws" {
   version = "~> 2.19.0"
-}
-
-terraform {
-  backend "s3" {}
+  region  = "us-east-1"
 }
 
 module "label" {
@@ -16,7 +13,7 @@ module "label" {
 
 data "aws_iam_policy_document" "default" {
   statement {
-    action = ["sts:AssumeRole"]
+    actions = ["sts:AssumeRole"]
 
     principals {
       type        = "AWS"
@@ -41,9 +38,9 @@ resource "aws_iam_role" "default" {
 }
 
 resource "aws_iam_policy_attachment" "default" {
-  count = var.enabled == true ? 1 : 0
+  count = var.enabled == true ? length(var.policy_arns) : 0
 
   name       = join("", aws_iam_role.default.*.name)
   roles      = aws_iam_role.default.*.name
-  policy_arn = var.policy_arns
+  policy_arn = element(var.policy_arns, count.index)
 }
