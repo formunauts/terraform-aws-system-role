@@ -36,7 +36,7 @@ resource "aws_iam_role" "default" {
 
   name               = var.role_name == "" ? module.label.name : var.role_name
   description        = "Managed by Terraform"
-  assume_role_policy = data.aws_iam_role_policy_document.default.json
+  assume_role_policy = data.aws_iam_policy_document.default.json
   tags               = module.label.tags
 }
 
