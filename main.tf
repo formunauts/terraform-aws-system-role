@@ -14,7 +14,7 @@ module "label" {
   name      = var.name
 }
 
-data "aws_iam_role_policy_document" "default" {
+data "aws_iam_policy_document" "default" {
   statement {
     action = ["sts:AssumeRole"]
 
