@@ -14,6 +14,12 @@ variable "name" {
   description = "Application or solution name (e.g. `app`)"
 }
 
+variable "account_id" {
+  type        = string
+  default     = ""
+  description = "AWS account ID from where the role can be assumed"
+}
+
 variable "role_name" {
   type        = string
   default     = ""
