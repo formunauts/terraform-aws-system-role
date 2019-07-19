@@ -15,6 +15,7 @@ module "label" {
 
 locals {
   account_id = var.account_id == "" ? data.aws_caller_identity.current.account_id : var.account_id
+  mfa        = var.require_mfa ? [true] : []
 }
 
 data "aws_iam_policy_document" "default" {
@@ -26,10 +27,14 @@ data "aws_iam_policy_document" "default" {
       identifiers = ["arn:aws:iam::${local.account_id}:root"]
     }
 
-    condition {
-      test     = "Bool"
-      variable = "aws:MultiFactorAuthPresent"
-      values   = [true]
+    dynamic "condition" {
+      for_each = local.mfa
+
+      content {
+        test     = "Bool"
+        variable = "aws:MultiFactorAuthPresent"
+        values   = [condition.value]
+      }
     }
   }
 }

@@ -37,3 +37,9 @@ variable "policy_arns" {
   default     = ["arn:aws:iam::aws:policy/AdministratorAccess"]
   description = "List of policy ARNs to be attached to the role"
 }
+
+variable "require_mfa" {
+  type        = bool
+  default     = true
+  description = "Whether or not to require multi-factor authentication"
+}
